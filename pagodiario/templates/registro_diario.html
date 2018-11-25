@@ -1,0 +1,43 @@
+{% extends 'base.html'%}
+
+{%block title%} Registro diario {%endblock%}
+
+{%block header%}
+{%from "_macro.html" import render_field%}
+<div id="content-formulario">
+	<form method="POST">
+	{{ render_field(form.fecha, class='form-control ') }}
+	{{ render_field(form.base, class='form-control ') }}
+	{{ render_field(form.gastos, class='form-control ') }}
+	{{ render_field(form.compras, class='form-control ') }}
+	{{ render_field(form.dinero, class='form-control ')}}
+	{{ render_field(form.ventas, class='form-control ')}}
+	{{ render_field(form.total, class='form-control ') }}
+	<button type="submit" class="btn btn-success">Guardar</button>
+</form>
+</div>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Fecha</th>
+			<th>Base</th>
+			<th>Gastos</th>
+			<th>Compras</th>
+			<th>Dinero</th>
+			<th>Ventas</th>
+			<th>Total</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th>{{ form.fecha.data }}</th>
+			<th>{{ form.base.data }}</th>
+			<th>{{ form.gastos.data }}</th>
+			<th>{{ form.compras.data }}</th>
+			<th>{{ form.dinero.data }}</th>
+			<th>{{ form.ventas.data }}</th>
+			<th>{{ form.total.data }}</th>
+		</tr>
+	</tbody>
+</table>
+{%endblock%}
