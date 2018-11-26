@@ -3,7 +3,7 @@ body{
 	margin: 0;
 }
 form{ 
-	border: 1px solid orange;
+	/*border: 1px solid orange;*/
 	margin: 1% auto;
 	padding: 1%;
 	border-radius: 6% 6% 6% 6%;

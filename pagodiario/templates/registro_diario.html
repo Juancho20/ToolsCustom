@@ -28,16 +28,18 @@
 			<th>Total</th>
 		</tr>
 	</thead>
+	{% for row in rows %}
 	<tbody>
 		<tr>
-			<th>{{ form.fecha.data }}</th>
-			<th>{{ form.base.data }}</th>
-			<th>{{ form.gastos.data }}</th>
-			<th>{{ form.compras.data }}</th>
-			<th>{{ form.dinero.data }}</th>
-			<th>{{ form.ventas.data }}</th>
-			<th>{{ form.total.data }}</th>
+			<th>{{ row["fecha"] }}</th>
+			<th>{{ row["base"] }}</th>
+			<th>{{ row["gastos"] }}</th>
+			<th>{{ row["compras"] }}</th>
+			<th>{{ row["dinero"] }}</th>
+			<th>{{ row["ventas"] }}</th>
+			<th>{{ row["total"] }}</th>
 		</tr>
 	</tbody>
+	{% endfor %}
 </table>
 {%endblock%}

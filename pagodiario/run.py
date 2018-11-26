@@ -1,29 +1,23 @@
 from flask import Flask
 from flask import render_template, request, redirect
-from flask import g
+#from flask import g
 
 #from config import DevelopmentConfig
 
 #from models import db
-from models import Registro
+#from models import Registro
 
-import forms, sqlite3
+import forms, sqlite3,getpass
 
 app = Flask(__name__)
 
-DATABASE = '/data/registro_diario.db'
+username = getpass.getuser()
 
-def get_db():
-	db = getattr(g, '_database', None)
-	if db is None:
-		sb = g._database = sqlite3.connect(DATABASE)
-	return db
+#conexion = sqlite3.connect('C:/Users/'+username+'/Desktop/pagodiario/data/registro_diario.db')
 
-@app.teardown_appcontext
-def close_connection(exception):
-	db = getattr(g, '_database', None)
-	if db is not None:
-		db.close()
+
+#conexion.execute('CREATE TABLE Registro(fecha DATE,base INTEGER,gastos INTEGER,compras INTEGER,dinero INTEGER,ventas INTEGER,total INTEGER)')
+#conexion.close()
 
 @app.route('/')
 def index():
@@ -33,6 +27,8 @@ def index():
 def registro():
 	registroform = forms.RegistroForm(request.form)
 	if request.method == 'POST':
+		conexion = sqlite3.connect('C:/Users/'+username+'/Desktop/pagodiario/data/registro_diario.db')
+		sentencia = conexion.cursor()
 		registroform.fecha.data
 		registroform.base.data
 		registroform.gastos.data
@@ -44,14 +40,32 @@ def registro():
 		gasto1 = int(registroform.dinero.data) - int(gasto)
 		total_f = int(ganancia) - int(gasto1)
 		registroform.total.data = total_f#int(registroform.base.data)+int(registroform.gastos.data)+int(registroform.compras.data)+int(registroform.dinero.data)+int(registroform.ventas.data)
-	return render_template('registro_diario.html', form = registroform)
+		sentencia.execute("INSERT INTO Registro(fecha,base,gastos,compras,dinero,ventas,total) VALUES (?,?,?,?,?,?,?)",(registroform.fecha.data,registroform.base.data,registroform.gastos.data,registroform.compras.data,registroform.dinero.data,registroform.ventas.data,registroform.total.data))	
+		conexion.commit()
+		registroform.fecha.data = ""
+		registroform.base.data = ""
+		registroform.gastos.data = ""
+		registroform.compras.data = ""
+		registroform.dinero.data = ""
+		registroform.ventas.data = ""
+		registroform.total.data = ""
+		conexion.close()
+	
+		conexion_listar = sqlite3.connect('C:/Users/'+username+'/Desktop/pagodiario/data/registro_diario.db')
+		conexion_listar.row_factory = sqlite3.Row
+
+		cursor_listar = conexion_listar.cursor()
+		cursor_listar.execute("SELECT fecha,base,gastos,compras,dinero,ventas,total FROM Registro")
+		rows = cursor_listar.fetchall();
+		#conexion_listar.close()
+	return render_template('registro_diario.html', form = registroform, rows = rows)
 		
 
 if __name__ == '__main__':
 	app.run(debug=True)
-	db.init_app(app)
-	with app.app_context():
-		db.create_all()
+	#db.init_app(app)
+	#with app.app_context():
+	#	db.create_all()
 
 
 """base = request.form.get("base")
