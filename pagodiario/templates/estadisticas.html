@@ -1,0 +1,40 @@
+{% extends 'base.html'%}
+
+{%block title%} Estadisticas {%endblock%}
+
+{%block header%}
+{%from "_macro.html" import render_field%}
+<div id="content-formulario">
+	<form class="buscar" method="POST">
+		
+	{{ form.mes.label }} : {{ form.mes(**{"onchange":"this.form.submit()"})|safe }}
+	<button type="submit" class="btn btn-success">buscar</button>
+</form>
+</div>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Fecha</th>
+			<th>Base</th>
+			<th>Gastos</th>
+			<th>Compras</th>
+			<th>Dinero</th>
+			<th>Ventas</th>
+			<th>Total</th>
+		</tr>
+	</thead>
+	{% for r in row %}
+	<tbody>
+		<tr>
+			<th>{{ r["fecha"]}}</th>
+			<th>{{ r["base"] }}</th>
+			<th>{{ r["gastos"] }}</th>
+			<th>{{ r["compras"] }}</th>
+			<th>{{ r["dinero"] }}</th>
+			<th>{{ r["ventas"] }}</th>
+			<th>{{ r["total"] }}</th>
+		</tr>
+	</tbody>
+	{% endfor %}
+</table>
+{%endblock%}

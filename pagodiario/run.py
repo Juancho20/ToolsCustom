@@ -51,14 +51,28 @@ def registro():
 		registroform.total.data = ""
 		conexion.close()
 	
-		conexion_listar = sqlite3.connect('C:/Users/'+username+'/Desktop/pagodiario/data/registro_diario.db')
-		conexion_listar.row_factory = sqlite3.Row
+	conexion_listar = sqlite3.connect('C:/Users/'+username+'/Desktop/pagodiario/data/registro_diario.db')
+	conexion_listar.row_factory = sqlite3.Row
 
-		cursor_listar = conexion_listar.cursor()
-		cursor_listar.execute("SELECT fecha,base,gastos,compras,dinero,ventas,total FROM Registro")
-		rows = cursor_listar.fetchall();
-		#conexion_listar.close()
+	cursor_listar = conexion_listar.cursor()
+	cursor_listar.execute("SELECT fecha,base,gastos,compras,dinero,ventas,total FROM Registro")
+	rows = cursor_listar.fetchall();
+	#conexion_listar.close()
 	return render_template('registro_diario.html', form = registroform, rows = rows)
+
+@app.route('/estadisticas', methods=["GET", "POST"])
+def estadisticas():
+	#meses = ['01':'Enero','02':'Febrero','03':'Marzo','04':'Abril','05':'Mayo','06':'Junio',
+	#		'07':'Julio','08':'Agosto','09':'Septiembre','10':'Octubre','11':'Noviembre','12':'Diciembre']
+	buscarform = forms.BuscarForm(request.form)
+	if request.method == 'POST':
+		buscarform.mes.data
+	conexion_listar = sqlite3.connect('C:/Users/'+username+'/Desktop/pagodiario/data/registro_diario.db')
+	conexion_listar.row_factory = sqlite3.Row
+	cursor_listar = conexion_listar.cursor()
+	cursor_listar.execute("SELECT * FROM Registro WHERE fecha LIKE '%"+buscarform.mes.data+"%'")
+	row = cursor_listar.fetchall();
+	return render_template('estadisticas.html', form = buscarform, row = row)
 		
 
 if __name__ == '__main__':
@@ -110,3 +124,8 @@ def sumar():
 #ganancia = registroform.base.data + registroform.ventas.data
 #gasto = registroform.gastos.data + registroform.compras.data
 #gasto1 = gasto - registroform.dinero.data
+
+
+
+#Tengo que unir lo que hice en estadisticas junto con registro_diario ya que encontre la forma de adicionar 
+#el pequeño buscador
